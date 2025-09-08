@@ -29,8 +29,6 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
-
-            
         }
 
         body::before {
@@ -482,106 +480,59 @@
             position: fixed;
             top: 30px;
             right: 30px;
-            background: linear-gradient(45deg, #28a745, #20c997);
+            background: rgba(40, 167, 69, 0.9);
             color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            transform: translateX(400px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 12px 25px;
+            border-radius: 30px;
+            animation: fadeInOut 2s ease forwards;
             z-index: 1000;
-            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
-            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
         }
 
-        .copy-notification.show {
-            transform: translateX(0) scale(1);
-            animation: copySuccess 0.6s ease-out;
-        }
-
-        @keyframes copySuccess {
-            0% { transform: translateX(400px) scale(0.8); }
-            50% { transform: translateX(-10px) scale(1.05); }
-            100% { transform: translateX(0) scale(1); }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-20px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
         }
 
         .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
             text-align: center;
-            z-index: 100;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer p {
-            color: rgba(255, 255, 255, 0.9);
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.9rem;
-            margin: 0;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1.5s ease-out;
         }
 
         .footer .creators {
-            font-weight: 600;
-            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f093fb);
-            background-size: 300% 300%;
+            font-weight: bold;
+            background: linear-gradient(45deg, #f093fb, #f5576c, #4facfe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: rainbowText 4s ease-in-out infinite;
-        }
-
-        @keyframes fadeInUp {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes rainbowText {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
         }
 
         @media (max-width: 768px) {
-            .conversion-section {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .convert-arrow {
-                transform: rotate(90deg);
+            .converter-container {
+                padding: 25px;
             }
 
             .header h1 {
                 font-size: 2rem;
             }
 
-            .floating-shape {
-                display: none;
+            .conversion-section {
+                grid-template-columns: 1fr;
             }
 
-            .footer p {
-                font-size: 0.8rem;
-                line-height: 1.4;
-            }
-
-            body {
-                padding-bottom: 80px;
+            .convert-arrow {
+                transform: rotate(90deg);
+                margin: 15px 0;
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Floating shapes for background decoration -->
     <div class="floating-shapes">
         <div class="floating-shape"></div>
         <div class="floating-shape"></div>
@@ -590,205 +541,171 @@
         <div class="floating-shape"></div>
         <div class="floating-shape"></div>
     </div>
-
+    
     <div class="converter-container">
         <div class="header">
             <h1>Number System Converter</h1>
-            <p>Convert between Binary, Decimal, Octal, and Hexadecimal</p>
+            <p>Convert numbers between Binary, Decimal, Octal, and Hexadecimal systems</p>
         </div>
-
+        
         <div class="conversion-section">
             <div class="input-group">
                 <select id="inputBase" class="base-selector">
                     <option value="2">Binary (Base 2)</option>
-                    <option value="10" selected>Decimal (Base 10)</option>
                     <option value="8">Octal (Base 8)</option>
+                    <option value="10" selected>Decimal (Base 10)</option>
                     <option value="16">Hexadecimal (Base 16)</option>
                 </select>
-                <input type="text" id="inputNumber" class="number-input" placeholder="Enter number...">
-                <div id="inputError" class="error"></div>
+                <input type="text" id="inputNumber" class="number-input" placeholder="Enter number">
+                <div id="error" class="error"></div>
             </div>
-
+            
             <div class="convert-arrow">→</div>
-
+            
             <div class="output-group">
                 <select id="outputBase" class="base-selector">
-                    <option value="2">Binary- (Base 2)</option>
-                    <option value="10">Decimal (Base 10)</option>
+                    <option value="2">Binary (Base 2)</option>
                     <option value="8">Octal (Base 8)</option>
+                    <option value="10">Decimal (Base 10)</option>
                     <option value="16" selected>Hexadecimal (Base 16)</option>
                 </select>
-                <div id="outputNumber" class="number-output" title="Click to copy">Click here after conversion</div>
+                <div id="outputNumber" class="number-output">Result will appear here</div>
             </div>
         </div>
-
-        <div class="all-conversions" id="allConversions" style="display: none;">
+        
+        <div class="all-conversions">
             <h3>All Conversions</h3>
             <div class="conversion-grid">
-                <div class="conversion-item" data-base="2">
-                    <div class="conversion-label">Binary (Base 2)</div>
-                    <div class="conversion-value" id="binary">-</div>
+                <div class="conversion-item" data-type="binary">
+                    <div class="conversion-label">Binary</div>
+                    <div id="binaryValue" class="conversion-value">-</div>
                 </div>
-                <div class="conversion-item" data-base="10">
-                    <div class="conversion-label">Decimal (Base 10)</div>
-                    <div class="conversion-value" id="decimal">-</div>
+                <div class="conversion-item" data-type="octal">
+                    <div class="conversion-label">Octal</div>
+                    <div id="octalValue" class="conversion-value">-</div>
                 </div>
-                <div class="conversion-item" data-base="8">
-                    <div class="conversion-label">Octal (Base 8)</div>
-                    <div class="conversion-value" id="octal">-</div>
+                <div class="conversion-item" data-type="decimal">
+                    <div class="conversion-label">Decimal</div>
+                    <div id="decimalValue" class="conversion-value">-</div>
                 </div>
-                <div class="conversion-item" data-base="16">
-                    <div class="conversion-label">Hexadecimal (Base 16)</div>
-                    <div class="conversion-value" id="hexadecimal">-</div>
+                <div class="conversion-item" data-type="hexadecimal">
+                    <div class="conversion-label">Hexadecimal</div>
+                    <div id="hexValue" class="conversion-value">-</div>
                 </div>
             </div>
+        </div>
+        
+        <!-- Fixed footer -->
+        <div class="footer">
+            <p>Made with ❤️ by <span class="creators">Hanishka</span></p>
         </div>
     </div>
 
-    <div class="copy-notification" id="copyNotification">Copied to clipboard!</div>
-
-
-
     <script>
-        class NumberSystemConverter {
+        class NumberConverter {
             constructor() {
                 this.inputNumber = document.getElementById('inputNumber');
-                this.outputNumber = document.getElementById('outputNumber');
                 this.inputBase = document.getElementById('inputBase');
                 this.outputBase = document.getElementById('outputBase');
-                this.inputError = document.getElementById('inputError');
-                this.allConversions = document.getElementById('allConversions');
-                this.copyNotification = document.getElementById('copyNotification');
-
-                this.initializeEventListeners();
+                this.outputNumber = document.getElementById('outputNumber');
+                this.error = document.getElementById('error');
+                
+                this.binaryValue = document.getElementById('binaryValue');
+                this.octalValue = document.getElementById('octalValue');
+                this.decimalValue = document.getElementById('decimalValue');
+                this.hexValue = document.getElementById('hexValue');
+                
+                this.initEvents();
             }
-
-            initializeEventListeners() {
+            
+            initEvents() {
                 this.inputNumber.addEventListener('input', () => this.convert());
                 this.inputBase.addEventListener('change', () => this.convert());
                 this.outputBase.addEventListener('change', () => this.convert());
-                
-                // Copy functionality
                 this.outputNumber.addEventListener('click', () => this.copyToClipboard(this.outputNumber.textContent));
                 
-                // Copy functionality for all conversions
                 document.querySelectorAll('.conversion-item').forEach(item => {
                     item.addEventListener('click', () => {
-                        const value = item.querySelector('.conversion-value').textContent;
-                        if (value !== '-') {
-                            this.copyToClipboard(value);
-                        }
+                        this.copyToClipboard(item.querySelector('.conversion-value').textContent);
                     });
                 });
             }
-
-            isValidNumber(number, base) {
-                if (!number || number.trim() === '') return false;
+            
+            validateInput(value, base) {
+                const patterns = {
+                    2: /^[01]+$/,
+                    8: /^[0-7]+$/,
+                    10: /^-?\d+$/,
+                    16: /^[0-9a-fA-F]+$/
+                };
                 
-                const cleanNumber = number.trim().toUpperCase();
-                
-                switch(parseInt(base)) {
-                    case 2:
-                        return /^[01]+$/.test(cleanNumber);
-                    case 8:
-                        return /^[0-7]+$/.test(cleanNumber);
-                    case 10:
-                        return /^[0-9]+$/.test(cleanNumber);
-                    case 16:
-                        return /^[0-9A-F]+$/.test(cleanNumber);
-                    default:
-                        return false;
-                }
+                if (!value) return false;
+                return patterns[base].test(value);
             }
-
+            
             convert() {
                 const inputValue = this.inputNumber.value.trim();
-                const inputBaseValue = parseInt(this.inputBase.value);
-                const outputBaseValue = parseInt(this.outputBase.value);
-
-                // Clear previous error
-                this.inputError.textContent = '';
-
-                if (!inputValue) {
-                    this.outputNumber.textContent = 'Enter a number to convert';
-                    this.allConversions.style.display = 'none';
+                const inputBase = parseInt(this.inputBase.value);
+                const outputBase = parseInt(this.outputBase.value);
+                
+                if (!this.validateInput(inputValue, inputBase)) {
+                    this.error.textContent = `Invalid ${this.inputBase.options[this.inputBase.selectedIndex].text} number`;
+                    this.outputNumber.textContent = "Invalid Input";
+                    this.updateAllConversions(null);
                     return;
                 }
-
-                if (!this.isValidNumber(inputValue, inputBaseValue)) {
-                    this.inputError.textContent = `Invalid number for base ${inputBaseValue}`;
-                    this.outputNumber.textContent = 'Invalid input';
-                    this.allConversions.style.display = 'none';
-                    return;
-                }
-
+                
+                this.error.textContent = "";
+                
                 try {
-                    // Convert to decimal first
-                    const decimalValue = parseInt(inputValue.toUpperCase(), inputBaseValue);
+                    const decimalValue = parseInt(inputValue, inputBase);
+                    const outputValue = decimalValue.toString(outputBase).toUpperCase();
                     
-                    // Convert to target base
-                    const result = this.convertToBase(decimalValue, outputBaseValue);
-                    this.outputNumber.textContent = result;
-
-                    // Show all conversions
-                    this.showAllConversions(decimalValue);
-                } catch (error) {
-                    this.inputError.textContent = 'Conversion error';
-                    this.outputNumber.textContent = 'Error';
-                    this.allConversions.style.display = 'none';
+                    this.outputNumber.textContent = outputValue;
+                    this.updateAllConversions(decimalValue);
+                } catch (e) {
+                    this.error.textContent = "Conversion error";
+                    this.outputNumber.textContent = "Error";
+                    this.updateAllConversions(null);
                 }
             }
-
-            convertToBase(decimal, base) {
-                if (base === 10) {
-                    return decimal.toString();
-                }
-                
-                const result = decimal.toString(base).toUpperCase();
-                return result;
-            }
-
-            showAllConversions(decimalValue) {
-                document.getElementById('binary').textContent = decimalValue.toString(2);
-                document.getElementById('decimal').textContent = decimalValue.toString(10);
-                document.getElementById('octal').textContent = decimalValue.toString(8);
-                document.getElementById('hexadecimal').textContent = decimalValue.toString(16).toUpperCase();
-                
-                this.allConversions.style.display = 'block';
-            }
-
-            copyToClipboard(text) {
-                if (text === 'Enter a number to convert' || text === 'Invalid input' || text === 'Error' || text === '-') {
+            
+            updateAllConversions(decimalValue) {
+                if (decimalValue === null) {
+                    this.binaryValue.textContent = "-";
+                    this.octalValue.textContent = "-";
+                    this.decimalValue.textContent = "-";
+                    this.hexValue.textContent = "-";
                     return;
                 }
-
+                
+                this.binaryValue.textContent = decimalValue.toString(2);
+                this.octalValue.textContent = decimalValue.toString(8);
+                this.decimalValue.textContent = decimalValue.toString(10);
+                this.hexValue.textContent = decimalValue.toString(16).toUpperCase();
+            }
+            
+            copyToClipboard(text) {
+                if (text === "Result will appear here" || text === "-" || text === "Invalid Input") return;
+                
                 navigator.clipboard.writeText(text).then(() => {
-                    this.showCopyNotification();
-                }).catch(() => {
-                    // Fallback for older browsers
-                    const textArea = document.createElement('textarea');
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    this.showCopyNotification();
+                    this.showNotification("Copied to clipboard!");
                 });
             }
-
-            showCopyNotification() {
-                this.copyNotification.classList.add('show');
+            
+            showNotification(message) {
+                const notification = document.createElement("div");
+                notification.className = "copy-notification";
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
                 setTimeout(() => {
-                    this.copyNotification.classList.remove('show');
+                    notification.remove();
                 }, 2000);
             }
         }
-
-        // Initialize the converter when the page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new NumberSystemConverter();
-        });
+        
+        new NumberConverter();
     </script>
-    <footer>hello there</footer>
 </body>
 </html>
